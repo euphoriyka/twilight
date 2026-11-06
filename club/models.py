@@ -108,7 +108,7 @@ class Booking(models.Model):
                     (TsTzRange("start_time", "end_time", RangeBoundary()), RangeOperators.OVERLAPS),
                     ("computer", RangeOperators.EQUAL),
                 ],
-                check=Q(status__in=["pending", "confirmed"]),
+                condition=Q(status__in=["pending", "confirmed"]),
             ),
         ]
 
