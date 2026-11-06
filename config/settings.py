@@ -74,7 +74,6 @@ DATABASES = {
         conn_health_checks=True,
     )
 }
-}
 
 AUTH_USER_MODEL = "accounts.User"
 AUTH_PASSWORD_VALIDATORS = [
