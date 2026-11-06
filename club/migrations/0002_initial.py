@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Тарифы',
                 'db_table': 'tariffs',
                 'ordering': ['category', 'kind'],
-                'constraints': [models.CheckConstraint(condition=models.Q(('price_per_hour__gte', 0)), name='tariff_price_gte_0')],
+                'constraints': [models.CheckConstraint(check=models.Q(('price_per_hour__gte', 0)), name='tariff_price_gte_0')],
             },
         ),
         migrations.AddField(
@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='booking',
-            constraint=models.CheckConstraint(condition=models.Q(('end_time__gt', models.F('start_time'))), name='booking_end_after_start'),
+            constraint=models.CheckConstraint(check=models.Q(('end_time__gt', models.F('start_time'))), name='booking_end_after_start'),
         ),
         migrations.AddConstraint(
             model_name='booking',
@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='payment',
-            constraint=models.CheckConstraint(condition=models.Q(('amount__gt', 0)), name='payment_amount_gt_0'),
+            constraint=models.CheckConstraint(check=models.Q(('amount__gt', 0)), name='payment_amount_gt_0'),
         ),
         migrations.AddConstraint(
             model_name='payment',
@@ -132,11 +132,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='gamesession',
-            constraint=models.CheckConstraint(condition=models.Q(('total_amount__gte', 0)), name='session_total_gte_0'),
+            constraint=models.CheckConstraint(check=models.Q(('total_amount__gte', 0)), name='session_total_gte_0'),
         ),
         migrations.AddConstraint(
             model_name='gamesession',
-            constraint=models.CheckConstraint(condition=models.Q(('end_time__isnull', True), ('end_time__gte', models.F('start_time')), _connector='OR'), name='session_end_after_start'),
+            constraint=models.CheckConstraint(check=models.Q(('end_time__isnull', True), ('end_time__gte', models.F('start_time')), _connector='OR'), name='session_end_after_start'),
         ),
         migrations.AddConstraint(
             model_name='gamesession',
