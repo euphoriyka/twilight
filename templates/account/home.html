@@ -1,0 +1,16 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Кабинет · TWILIGHT{% endblock %}
+{% block h1 %}Здравствуйте, {{ request.user.full_name }}{% endblock %}
+{% block content %}
+<div class="cards">
+  <div class="panel"><span class="k">Завершённых сессий</span><strong>{{ sessions_count }}</strong></div>
+  <div class="panel"><span class="k">Оплачено всего</span><strong>{{ paid_total|money }}</strong></div>
+  <div class="panel"><span class="k">Активная сессия</span>
+    {% if active %}<strong>№{{ active.computer.computer_number }}</strong><small>с {{ active.start_time|date:"H:i" }} · {{ active.tariff.tariff_name }}</small>{% else %}<strong>—</strong>{% endif %}</div>
+</div>
+<h2>Ближайшие брони</h2>
+{% if upcoming %}<div class="table-wrap"><table>
+<tr><th>Место</th><th>Начало</th><th>Конец</th><th>Статус</th></tr>
+{% for b in upcoming %}<tr><td>№{{ b.computer.computer_number }} · {{ b.computer.get_category_display }}</td><td>{{ b.start_time|date:"d.m H:i" }}</td><td>{{ b.end_time|date:"d.m H:i" }}</td><td><span class="badge {{ b.status|badge }}">{{ b.get_status_display }}</span></td></tr>{% endfor %}
+</table></div>{% else %}<p class="empty">Броней пока нет. <a href="{% url 'account:computers' %}">Забронировать место</a></p>{% endif %}
+{% endblock %}

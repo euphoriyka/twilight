@@ -1,0 +1,10 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Сессии · TWILIGHT{% endblock %}
+{% block h1 %}История сессий{% endblock %}
+{% block content %}
+{% if page %}<div class="table-wrap"><table>
+<tr><th>Место</th><th>Тариф</th><th>Начало</th><th>Конец</th><th>Итого</th></tr>
+{% for s in page %}<tr><td>№{{ s.computer.computer_number }}</td><td>{{ s.tariff.tariff_name }}</td><td>{{ s.start_time|date:"d.m.Y H:i" }}</td>
+<td>{% if s.end_time %}{{ s.end_time|date:"d.m.Y H:i" }}{% else %}<span class="badge warn">идёт</span>{% endif %}</td><td>{{ s.total_amount|money }}</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Сессий пока не было.</p>{% endif %}
+{% endblock %}

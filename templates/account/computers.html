@@ -1,0 +1,23 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Бронирование · TWILIGHT{% endblock %}
+{% block h1 %}Забронировать место{% endblock %}
+{% block content %}
+<form method="get" class="inline-form">
+  <div class="field"><label>Дата</label><input type="date" name="date" value="{{ date }}" required></div>
+  <div class="field"><label>Время</label><input type="time" name="time" value="{{ time }}" required></div>
+  <div class="field"><label>Часов</label><select name="hours">{% for h in hours_choices %}<option value="{{ h }}" {% if h|stringformat:"s" == hours %}selected{% endif %}>{{ h }}</option>{% endfor %}</select></div>
+  <button class="btn btn-primary" type="submit">Показать свободные</button>
+</form>
+{% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+{% if searched and not error %}
+<div class="table-wrap"><table>
+<tr><th>Место</th><th>Категория</th><th>Характеристики</th><th></th></tr>
+{% for r in rows %}<tr class="{% if r.reason %}dim{% endif %}">
+<td>№{{ r.c.computer_number }} {{ r.c.computer_name }}</td><td>{{ r.c.get_category_display }}</td><td>{{ r.c.specifications|default:"—" }}</td>
+<td>{% if r.reason %}<span class="badge bad" title="{{ r.reason }}">{{ r.reason }}</span>{% else %}
+<form method="post" action="{% url 'account:book' %}">{% csrf_token %}
+<input type="hidden" name="computer_id" value="{{ r.c.pk }}"><input type="hidden" name="date" value="{{ date }}"><input type="hidden" name="time" value="{{ time }}"><input type="hidden" name="hours" value="{{ hours }}">
+<button class="btn btn-primary" type="submit">Забронировать</button></form>{% endif %}</td></tr>{% endfor %}
+</table></div>
+{% elif not searched %}<p class="empty">Выберите дату, время и длительность.</p>{% endif %}
+{% endblock %}

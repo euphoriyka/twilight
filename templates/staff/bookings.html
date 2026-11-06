@@ -1,0 +1,21 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Бронирования · TWILIGHT{% endblock %}
+{% block h1 %}Бронирования{% endblock %}
+{% block content %}
+<form method="get" class="inline-form">
+  <div class="field"><label>Статус</label><select name="status"><option value="">Все</option>{% for v, l in statuses %}<option value="{{ v }}" {% if f.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="field"><label>Клиент</label><input type="search" name="q" value="{{ f.q }}" placeholder="имя, email, телефон"></div>
+  <div class="field"><label>Дата начала</label><input type="date" name="date" value="{{ f.date }}"></div>
+  <button class="btn btn-ghost" type="submit">Найти</button>
+</form>
+{% if page %}<div class="table-wrap"><table>
+<tr><th>№</th><th>Клиент</th><th>Место</th><th>Время</th><th>Статус</th><th></th></tr>
+{% for b in page %}<tr><td>{{ b.pk }}</td><td>{{ b.user.full_name }}<br><small>{{ b.user.phone }}</small></td><td>№{{ b.computer.computer_number }}</td>
+<td>{{ b.start_time|date:"d.m.Y H:i" }}–{{ b.end_time|date:"H:i" }}</td><td><span class="badge {{ b.status|badge }}">{{ b.get_status_display }}</span></td>
+<td class="row-actions">
+{% if b.status == "pending" %}<form method="post" action="{% url 'staff:booking_action' b.pk %}">{% csrf_token %}<input type="hidden" name="action" value="confirm"><button class="btn btn-primary" type="submit">Подтвердить</button></form>{% endif %}
+{% if b.status == "confirmed" %}<a class="btn btn-primary" href="{% url 'staff:session_start' %}?booking={{ b.pk }}">Начать сессию</a>{% endif %}
+{% if b.status == "pending" or b.status == "confirmed" %}<form method="post" action="{% url 'staff:booking_action' b.pk %}">{% csrf_token %}<input type="hidden" name="action" value="cancel"><button class="btn btn-ghost" type="submit">Отменить</button></form>{% endif %}
+</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Ничего не найдено.</p>{% endif %}
+{% endblock %}

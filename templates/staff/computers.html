@@ -1,0 +1,15 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Компьютеры · TWILIGHT{% endblock %}
+{% block h1 %}Компьютеры{% endblock %}
+{% block content %}
+<p><a class="btn btn-primary" href="{% url 'staff:computer_new' %}">Добавить компьютер</a></p>
+<div class="table-wrap"><table>
+<tr><th>№</th><th>Название</th><th>Категория</th><th>Характеристики</th><th>Статус</th><th></th></tr>
+{% for c in items %}<tr><td>{{ c.computer_number }}</td><td>{{ c.computer_name }}</td><td>{{ c.get_category_display }}</td><td>{{ c.specifications|default:"—" }}</td>
+<td><span class="badge {{ c.status|badge }}">{{ c.get_status_display }}</span></td>
+<td class="row-actions"><a class="btn btn-ghost" href="{% url 'staff:computer_edit' c.pk %}">Изменить</a>
+{% if c.status != "occupied" %}<form method="post" action="{% url 'staff:computer_status' c.pk %}">{% csrf_token %}
+<input type="hidden" name="status" value="{% if c.status == 'maintenance' %}available{% else %}maintenance{% endif %}">
+<button class="btn btn-ghost" type="submit">{% if c.status == 'maintenance' %}Вернуть в работу{% else %}На обслуживание{% endif %}</button></form>{% endif %}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

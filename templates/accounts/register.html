@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Регистрация · TWILIGHT{% endblock %}
+{% block bodyclass %}app auth-page{% endblock %}
+{% block body %}
+<main class="auth-card">
+  <a href="/" class="logo">TWILIGHT</a>
+  <h1>Регистрация</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "_form_fields.html" %}
+    <button class="btn btn-primary" type="submit">Создать аккаунт</button>
+  </form>
+  <p class="small">Уже есть аккаунт? <a href="{% url 'account:login' %}">Войти</a> · <a href="/">На главную</a></p>
+</main>
+{% endblock %}

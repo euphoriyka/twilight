@@ -1,0 +1,11 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Мои брони · TWILIGHT{% endblock %}
+{% block h1 %}Мои брони{% endblock %}
+{% block content %}
+{% if page %}<div class="table-wrap"><table>
+<tr><th>№</th><th>Место</th><th>Начало</th><th>Конец</th><th>Статус</th><th></th></tr>
+{% for b in page %}<tr><td>{{ b.pk }}</td><td>№{{ b.computer.computer_number }}</td><td>{{ b.start_time|date:"d.m.Y H:i" }}</td><td>{{ b.end_time|date:"d.m.Y H:i" }}</td>
+<td><span class="badge {{ b.status|badge }}">{{ b.get_status_display }}</span></td>
+<td>{% if b.status == "pending" or b.status == "confirmed" %}{% if b.start_time > now %}<form method="post" action="{% url 'account:cancel_booking' b.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Отменить</button></form>{% endif %}{% endif %}</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Броней нет.</p>{% endif %}
+{% endblock %}

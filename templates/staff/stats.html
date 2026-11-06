@@ -1,0 +1,14 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Статистика · TWILIGHT{% endblock %}
+{% block h1 %}Статистика{% endblock %}
+{% block content %}
+{% include "staff/_period.html" %}
+{% include "staff/_stats_body.html" %}
+<div class="two-col">
+  <div><h2>Время суток (старты сессий)</h2><div class="table-wrap"><table>{% for k, n in stats.by_hour %}<tr><td>{{ k }}</td><td>{{ n }}</td></tr>{% endfor %}</table></div></div>
+  <div><h2>Популярность тарифов</h2>{% if stats.by_tariff %}<div class="table-wrap"><table>{% for k, n in stats.by_tariff %}<tr><td>{{ k }}</td><td>{{ n }}</td></tr>{% endfor %}</table></div>{% else %}<p class="empty">Нет данных за период.</p>{% endif %}</div>
+</div>
+<h2>Загрузка компьютеров</h2>
+<div class="table-wrap"><table>{% for r in stats.per_computer %}<tr><td>№{{ r.computer.computer_number }} · {{ r.computer.get_category_display }}</td>
+<td style="width:60%"><div class="bar"><i style="width:{{ r.percent }}%"></i></div></td><td>{{ r.percent }}%</td></tr>{% endfor %}</table></div>
+{% endblock %}

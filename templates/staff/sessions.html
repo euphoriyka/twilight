@@ -1,0 +1,14 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Сессии · TWILIGHT{% endblock %}
+{% block h1 %}Игровые сессии{% endblock %}
+{% block content %}
+<p><a class="btn btn-primary" href="{% url 'staff:session_start' %}">Начать сессию</a>
+<a class="btn btn-ghost" href="?{% if not only_active %}active=1{% endif %}">{% if only_active %}Показать все{% else %}Только активные{% endif %}</a></p>
+{% if page %}<div class="table-wrap"><table>
+<tr><th>№</th><th>Клиент</th><th>Место</th><th>Тариф</th><th>Начало</th><th>Конец</th><th>Итого</th><th></th></tr>
+{% for s in page %}<tr><td>{{ s.pk }}</td><td>{{ s.user.full_name }}</td><td>№{{ s.computer.computer_number }}</td><td>{{ s.tariff.tariff_name }}</td><td>{{ s.start_time|date:"d.m H:i" }}</td>
+<td>{% if s.end_time %}{{ s.end_time|date:"d.m H:i" }}{% else %}<span class="badge warn">идёт</span>{% endif %}</td><td>{{ s.total_amount|money }}</td>
+<td class="row-actions">{% if not s.end_time %}<form method="post" action="{% url 'staff:session_finish' s.pk %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Завершить</button></form>
+{% else %}<a class="btn btn-ghost" href="{% url 'staff:payment_new' %}?session={{ s.pk }}">Оплата</a>{% endif %}</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Сессий нет.</p>{% endif %}
+{% endblock %}

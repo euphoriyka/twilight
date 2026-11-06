@@ -1,0 +1,11 @@
+{% extends "staff/base.html" %}
+{% block title %}Начать сессию · TWILIGHT{% endblock %}
+{% block h1 %}Начать сессию{% endblock %}
+{% block content %}
+{% if booking %}<p class="panel">По брони №{{ booking.pk }}: {{ booking.user.full_name }}, место №{{ booking.computer.computer_number }}, {{ booking.start_time|date:"d.m H:i" }}–{{ booking.end_time|date:"H:i" }}.</p>{% endif %}
+<form method="post" class="panel form-narrow" novalidate>{% csrf_token %}
+  {% include "_form_fields.html" %}
+  <p class="small">Для сессии без брони укажите компьютер и email зарегистрированного клиента.</p>
+  <div class="actions"><button class="btn btn-primary" type="submit">Начать</button> <a class="btn btn-ghost" href="{% url 'staff:sessions' %}">Назад</a></div>
+</form>
+{% endblock %}

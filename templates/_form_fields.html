@@ -1,0 +1,10 @@
+{% if form.non_field_errors %}<div class="flash error">{{ form.non_field_errors }}</div>{% endif %}
+{% for f in form.visible_fields %}
+<div class="field">
+  <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+  {{ f }}
+  {% if f.help_text %}<small>{{ f.help_text }}</small>{% endif %}
+  {% for e in f.errors %}<small class="err">{{ e }}</small>{% endfor %}
+</div>
+{% endfor %}
+{% for h in form.hidden_fields %}{{ h }}{% endfor %}

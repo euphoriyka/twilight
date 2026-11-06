@@ -1,0 +1,29 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Обзор · TWILIGHT{% endblock %}
+{% block h1 %}Обзор клуба{% endblock %}
+{% block content %}
+<div class="cards">
+  <div class="panel"><span class="k">Свободно</span><strong>{{ live.available }}</strong><small>из {{ live.total }}</small></div>
+  <div class="panel"><span class="k">Занято</span><strong>{{ live.occupied }}</strong></div>
+  <div class="panel"><span class="k">Обслуживание</span><strong>{{ live.maintenance }}</strong></div>
+  <div class="panel"><span class="k">Активных сессий</span><strong>{{ live.active_sessions }}</strong></div>
+  <div class="panel"><span class="k">Ждут подтверждения</span><strong>{{ live.pending_bookings }}</strong></div>
+</div>
+<h2>За период</h2>
+{% include "staff/_period.html" %}
+{% include "staff/_stats_body.html" %}
+<h2>Активные сессии</h2>
+{% if active_sessions %}<div class="table-wrap"><table>
+<tr><th>Место</th><th>Клиент</th><th>Тариф</th><th>С</th><th></th></tr>
+{% for s in active_sessions %}<tr><td>№{{ s.computer.computer_number }}</td><td>{{ s.user.full_name }}</td><td>{{ s.tariff.tariff_name }}</td><td>{{ s.start_time|date:"H:i" }}</td>
+<td><form method="post" action="{% url 'staff:session_finish' s.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'staff:dashboard' %}"><button class="btn btn-primary" type="submit">Завершить</button></form></td></tr>{% endfor %}
+</table></div>{% else %}<p class="empty">Сейчас нет активных сессий.</p>{% endif %}
+<h2>Заявки на подтверждение</h2>
+{% if pending %}<div class="table-wrap"><table>
+<tr><th>Клиент</th><th>Место</th><th>Время</th><th></th></tr>
+{% for b in pending %}<tr><td>{{ b.user.full_name }}<br><small>{{ b.user.phone }}</small></td><td>№{{ b.computer.computer_number }}</td><td>{{ b.start_time|date:"d.m H:i" }}–{{ b.end_time|date:"H:i" }}</td>
+<td class="row-actions">
+<form method="post" action="{% url 'staff:booking_action' b.pk %}">{% csrf_token %}<input type="hidden" name="action" value="confirm"><input type="hidden" name="next" value="{% url 'staff:dashboard' %}"><button class="btn btn-primary" type="submit">Подтвердить</button></form>
+<form method="post" action="{% url 'staff:booking_action' b.pk %}">{% csrf_token %}<input type="hidden" name="action" value="cancel"><input type="hidden" name="next" value="{% url 'staff:dashboard' %}"><button class="btn btn-ghost" type="submit">Отклонить</button></form></td></tr>{% endfor %}
+</table></div>{% else %}<p class="empty">Новых заявок нет.</p>{% endif %}
+{% endblock %}

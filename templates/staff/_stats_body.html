@@ -1,0 +1,8 @@
+{% load club_extras %}
+<div class="cards">
+  <div class="panel"><span class="k">Выручка (оплачено)</span><strong>{{ stats.revenue|money }}</strong></div>
+  <div class="panel"><span class="k">Завершено сессий</span><strong>{{ stats.finished_count }}</strong></div>
+  <div class="panel"><span class="k">Средний чек</span><strong>{{ stats.avg_check|money }}</strong></div>
+  <div class="panel"><span class="k">Загрузка клуба</span><strong>{{ stats.utilization }}%</strong></div>
+  <div class="panel"><span class="k">Броней / отмен</span><strong>{{ stats.bookings_total }} / {{ stats.bookings_cancelled }}</strong><small>{{ stats.cancel_percent }}% отмен</small></div>
+</div>

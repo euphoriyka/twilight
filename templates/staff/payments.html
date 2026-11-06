@@ -1,0 +1,16 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Платежи · TWILIGHT{% endblock %}
+{% block h1 %}Платежи{% endblock %}
+{% block content %}
+<form method="get" class="inline-form">
+  <div class="field"><label>Статус</label><select name="status" onchange="this.form.submit()"><option value="">Все</option>{% for v, l in statuses %}<option value="{{ v }}" {% if status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <a class="btn btn-primary" href="{% url 'staff:payment_new' %}">Принять оплату</a>
+</form>
+{% if page %}<div class="table-wrap"><table>
+<tr><th>№</th><th>Сессия</th><th>Клиент</th><th>Сумма</th><th>Способ</th><th>Статус</th><th>Оплачено</th><th>Транзакция</th><th></th></tr>
+{% for p in page %}<tr><td>{{ p.pk }}</td><td>№{{ p.session.pk }}</td><td>{{ p.session.user.full_name }}</td><td>{{ p.amount|money }}</td><td>{{ p.get_payment_method_display }}</td>
+<td><span class="badge {{ p.status|badge }}">{{ p.get_status_display }}</span></td><td>{{ p.paid_at|date:"d.m H:i"|default:"—" }}</td><td class="mono">{{ p.transaction_number|default:"—" }}</td>
+<td>{% if p.status == "paid" %}<form method="post" action="{% url 'staff:payment_refund' p.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit" onclick="return confirm('Отметить платёж как возвращённый?')">Возврат</button></form>{% endif %}</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Платежей нет.</p>{% endif %}
+<p class="small">Оплата демонстрационная: реальный эквайринг не подключён, номера транзакций начинаются с DEMO-.</p>
+{% endblock %}

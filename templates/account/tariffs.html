@@ -1,0 +1,10 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Тарифы · TWILIGHT{% endblock %}
+{% block h1 %}Тарифы{% endblock %}
+{% block content %}
+<div class="table-wrap"><table>
+<tr><th>Тариф</th><th>Категория</th><th>Цена за час</th><th>Описание</th></tr>
+{% for t in tariffs %}<tr><td>{{ t.tariff_name }}</td><td>{{ t.get_category_display }}</td><td>{{ t.price_per_hour|money }}</td><td>{{ t.description|default:"—" }}</td></tr>{% endfor %}
+</table></div>
+<p class="small">Время округляется вверх до полного часа. Итог сессии фиксируется в момент её завершения.</p>
+{% endblock %}

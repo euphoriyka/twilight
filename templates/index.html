@@ -1,0 +1,199 @@
+{% load static club_extras %}<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TWILIGHT — Enter the Night</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="mode-midnight">
+  <div class="loader" id="loader" aria-hidden="true"><span>TWILIGHT</span></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="fog" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <header class="topbar">
+    <a href="#top" class="logo">TWILIGHT</a>
+    <nav>
+      <a href="#top">Главная</a>
+      <a href="#games">Игры</a>
+      <a href="#hall">Зал</a>
+      <a href="#tariffs">Тарифы</a>
+      <a href="#club">Клуб</a>
+      <a href="#booking">Бронь</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="musicBtn" aria-pressed="false" title="Фоновая музыка">♪</button>
+      <button class="icon-btn" id="modeBtn" title="Визуальный режим">◐</button>
+      {% if request.user.is_authenticated %}<a href="{% if request.user.is_admin_role %}{% url 'staff:dashboard' %}{% else %}{% url 'account:home' %}{% endif %}" class="btn btn-ghost">{% if request.user.is_admin_role %}Админ-панель{% else %}Кабинет{% endif %}</a>{% else %}<a href="{% url 'account:login' %}" class="btn btn-ghost">Войти</a>{% endif %}
+    </div>
+  </header>
+
+  <section id="top" class="hero">
+    <div id="scene" class="scene" aria-hidden="true"></div>
+    <div class="hero-content" data-depth="0.6">
+      <p class="eyebrow">Компьютерный клуб</p>
+      <h1 id="heroTitle">TWILIGHT</h1>
+      <svg class="star-svg" viewBox="0 0 100 100" aria-hidden="true">
+        <path class="star-a" d="M50 8 L90 78 L10 78 Z"/>
+        <path class="star-b" d="M50 92 L10 22 L90 22 Z"/>
+      </svg>
+      <p class="slogan">Enter the Night.</p>
+      <p class="hero-text">Тихая ночь, холодный свет мониторов и мощное железо для игр и работы.</p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-primary magnetic">Забронировать место</a>
+        <a href="#tariffs" class="btn btn-ghost magnetic">Посмотреть тарифы</a>
+      </div>
+      <p class="clock-line"><span id="clock">--:--:--</span> <span id="tariffNow"></span></p>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">↓</div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Enter the Night ✦ Enter the Night ✦ Enter the Night ✦ Enter the Night ✦ </span><span>Enter the Night ✦ Enter the Night ✦ Enter the Night ✦ Enter the Night ✦ </span></div></div>
+
+  <section id="club" class="section">
+    <h2 class="reveal">О клубе <em>в тишине</em></h2>
+    <p class="lead reveal">TWILIGHT — премиальный клуб, где ночная атмосфера встречается с современной игровой культурой.</p>
+    <div class="grid three">
+      <div class="card tilt reveal"><h3>Производительность</h3><p>Мощные игровые станции с высоким разрешением и высокой частотой кадров.</p></div>
+      <div class="card tilt reveal"><h3>Тишина</h3><p>Спокойная зона без лишнего шума, удобно и для игр, и для учёбы.</p></div>
+      <div class="card tilt reveal"><h3>Гибкие тарифы</h3><p>Оплата по часам, пакетами или ночью. Выберите то, что удобно.</p></div>
+    </div>
+  </section>
+
+  <section id="games" class="section alt">
+    <h2 class="reveal">Игры <em>на любой вкус</em></h2>
+    <p class="lead reveal">Листайте стрелками или перетаскивайте мышью. Сердечком отмечайте избранное. Список уточняется.</p>
+    <div class="carousel-wrap reveal">
+      <button class="arrow" data-dir="-1" aria-label="Назад">‹</button>
+      <div class="carousel" id="carousel">
+        <article class="game-card tilt" data-id="sims"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-sims"><span>The Sims 4</span></div><h3>The Sims 4</h3><p class="genre">Симулятор жизни</p><p class="desc">Построй дом, заведи семью и проживи историю на своих условиях.</p></article>
+        <article class="game-card tilt" data-id="cs"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-cs"><span>Counter-Strike 2</span></div><h3>Counter-Strike 2</h3><p class="genre">Командный шутер</p><p class="desc">Тактика, раунды и точная стрельба против соперников.</p></article>
+        <article class="game-card tilt" data-id="dota"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-dota"><span>Dota 2</span></div><h3>Dota 2</h3><p class="genre">MOBA</p><p class="desc">Пятеро на пятеро, долгие матчи и командная стратегия.</p></article>
+        <article class="game-card tilt" data-id="metro33"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-metro"><span>Metro 2033 Redux</span></div><h3>Metro 2033 Redux</h3><p class="genre">Постапокалиптический шутер</p><p class="desc">Подземная Москва после войны и тени, которые пугают сильнее пуль.</p></article>
+        <article class="game-card tilt" data-id="exodus"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-exodus"><span>Metro Exodus</span></div><h3>Metro Exodus</h3><p class="genre">Шутер с элементами выживания</p><p class="desc">Путешествие по открытому миру на поезде через руины России.</p></article>
+        <article class="game-card tilt" data-id="revil"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-revil"><span>Resident Evil Village</span></div><h3>Resident Evil Village</h3><p class="genre">Survival horror</p><p class="desc">Деревня в горах, таинственный замок и напряжение на каждом шагу.</p></article>
+        <article class="game-card tilt" data-id="requiem"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-requiem"><span>Resident Evil Requiem</span></div><h3>Resident Evil Requiem</h3><p class="genre">Survival horror</p><p class="desc">Новая глава серии: страх, головоломки и тёмные коридоры.</p></article>
+        <article class="game-card tilt" data-id="cyber"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-cyber"><span>Cyberpunk 2077</span></div><h3>Cyberpunk 2077</h3><p class="genre">Action RPG</p><p class="desc">Ночной город будущего, где каждый выбор меняет историю.</p></article>
+        <article class="game-card tilt" data-id="mc"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-minecraft"><span>Minecraft</span></div><h3>Minecraft</h3><p class="genre">Песочница</p><p class="desc">Строй, исследуй и создавай всё, что придумаешь, хоть вдвоём.</p></article>
+        <article class="game-card tilt" data-id="rdr2"><button class="fav" aria-label="В избранное">♡</button><div class="game-art art-rdr2"><span>Red Dead Redemption 2</span></div><h3>Red Dead Redemption 2</h3><p class="genre">Action-adventure</p><p class="desc">Дикий Запад, большой мир и история, которую хочется пройти до конца.</p></article>
+      </div>
+      <button class="arrow" data-dir="1" aria-label="Вперёд">›</button>
+    </div>
+    <div class="fav-bar reveal"><span>Избранное: <strong id="favCount">0</strong></span><span id="favList" class="small"></span></div>
+  </section>
+
+  <section id="computers" class="section">
+    <h2 class="reveal">Компьютеры</h2>
+    <p class="lead reveal">Три категории мест. Характеристики конкретных мест указаны в карте зала.</p>
+    <div class="grid three">
+      <div class="card tilt reveal"><span class="tag">Standard</span><h3>Standard</h3><p>Комфортные места для повседневных игр.</p></div>
+      <div class="card tilt reveal accent"><span class="tag">Premium</span><h3>Premium</h3><p>Повышенная производительность и мониторы высокого разрешения.</p></div>
+      <div class="card tilt reveal"><span class="tag">VIP</span><h3>VIP</h3><p>Отдельная зона с максимальной комплектацией.</p></div>
+    </div>
+  </section>
+
+  <section id="tariffs" class="section alt">
+    <h2 class="reveal">Тарифы</h2>
+    <p class="lead reveal">Цены задаёт администратор клуба и хранятся в базе данных.</p>
+    <div class="price-table reveal">
+      <div class="pt-head"><span>Категория</span><span>Почасовой</span><span>Ночной (за час)</span></div>
+      {% for r in tariff_rows %}<div class="pt-row{% if r.key == 'prem' %} accent{% endif %}"><span class="tag">{{ r.label }}</span><span>{% if r.hour %}{{ r.hour.price_per_hour|money }}/ч{% else %}—{% endif %}</span><span>{% if r.night %}{{ r.night.price_per_hour|money }}/ч{% else %}—{% endif %}</span></div>{% endfor %}
+    </div>
+    <p class="small reveal">Ночной тариф: с 23:00 до 08:00. Время округляется вверх до полного часа. Цены демонстрационные.</p>
+    <div class="calc reveal">
+      <h3>Калькулятор</h3>
+      <div class="calc-grid">
+        <label>Категория
+          <select id="calcCat"><option value="std">Standard</option><option value="prem" selected>Premium</option><option value="vip">VIP</option></select>
+        </label>
+        <label>Тариф
+          <select id="calcTariff"></select>
+        </label>
+        <label id="calcHoursWrap" class="slider-label">Часов: <strong id="calcHoursOut">3</strong>
+          <input type="range" id="calcHours" min="1" max="12" value="3">
+        </label>
+      </div>
+      <div class="calc-result"><span>Итого</span><strong id="calcTotal">—</strong></div>
+    </div>
+  </section>
+
+  <section id="hall" class="section">
+    <h2 class="reveal">Карта зала</h2>
+    <p class="lead reveal">Нажмите на место, чтобы увидеть характеристики и цену. Фильтр показывает нужную категорию.</p>
+    <div class="filters reveal" id="hallFilters">
+      <button class="chip active" data-f="all">Все</button>
+      <button class="chip" data-f="std">Standard</button>
+      <button class="chip" data-f="prem">Premium</button>
+      <button class="chip" data-f="vip">VIP</button>
+    </div>
+    <div class="hall reveal">
+      <div class="stage">сцена / вход</div>
+      <div class="seat-grid" id="seatGrid">{% for st in seats %}<button type="button" class="seat {{ st.c.category }}{% if st.reason %} busy{% endif %}" data-id="{{ st.c.pk }}" data-cat="{{ st.c.category }}" data-num="{{ st.c.computer_number }}" data-name="{{ st.c.computer_name }}" data-specs="{{ st.c.specifications|default:'' }}" data-rate="{{ st.rate|default:'' }}" data-label="{{ st.c.get_category_display }}" data-reason="{{ st.reason|default:'' }}" aria-label="Место {{ st.c.computer_number }}">{{ st.c.computer_number }}</button>{% endfor %}</div>
+      <div class="legend"><span><i class="dot free"></i>Свободно</span><span><i class="dot busy-dot"></i>Занято сейчас</span><span><i class="dot sel"></i>Выбрано</span></div>
+      <div class="seat-info" id="seatInfo">Выберите место</div>
+    </div>
+  </section>
+
+  <section id="member" class="section alt">
+    <h2 class="reveal">Цифровая карта участника</h2>
+    {% if request.user.is_authenticated %}
+    <p class="lead reveal">Ваша карта связана с аккаунтом.</p>
+    <div class="member-wrap reveal"><div class="member-card"><span class="mc-sub">TWILIGHT · MEMBER</span><strong>{{ request.user.full_name }}</strong><span class="mc-id">{{ request.user.member_number }}</span></div></div>
+    {% else %}
+    <p class="lead reveal">Зарегистрируйтесь, и карта участника появится здесь.</p>
+    <div class="member-wrap reveal"><a class="btn btn-primary" href="{% url 'account:register' %}">Создать аккаунт</a> <a class="btn btn-ghost" href="{% url 'account:login' %}">Войти</a></div>
+    {% endif %}
+  </section>
+
+  <section id="achievements" class="section">
+    <h2 class="reveal">Достижения</h2>
+    <p class="lead reveal">Открывайте их, пока изучаете сайт.</p>
+    <div class="grid three" id="achGrid"></div>
+  </section>
+
+  <section id="booking" class="section alt">
+    <h2 class="reveal">Бронирование</h2>
+    <p class="lead reveal">Выберите место и время. Администратор подтвердит заявку.</p>
+    {% if request.user.is_authenticated and not request.user.is_admin_role %}
+    <form class="booking-form reveal" id="bookingForm" data-api="{% url 'api_book' %}" data-computers="{% url 'api_computers' %}" novalidate>
+      <select id="bkCat" aria-label="Категория"><option value="">Любая категория</option><option value="std">Standard</option><option value="prem">Premium</option><option value="vip">VIP</option></select>
+      <select id="bkComputer" required aria-label="Компьютер"><option value="">Компьютер</option>{% for st in seats %}<option value="{{ st.c.pk }}" data-cat="{{ st.c.category }}">№{{ st.c.computer_number }} · {{ st.c.get_category_display }}</option>{% endfor %}</select>
+      <input type="date" id="bkDate" required min="{{ today }}" value="{{ today }}">
+      <input type="time" id="bkTime" required value="19:00">
+      <label class="slider-label">Длительность: <strong id="hoursOut">2</strong> ч.
+        <input type="range" id="hours" min="1" max="12" value="2">
+      </label>
+      <button type="submit" class="btn btn-primary magnetic" id="submitBtn">Отправить заявку</button>
+      <p class="form-note" id="formNote" role="status"></p>
+    </form>
+    {% elif request.user.is_authenticated %}
+    <p class="reveal">Вы вошли как администратор. Бронями управляйте в <a href="{% url 'staff:dashboard' %}">админ-панели</a>.</p>
+    {% else %}
+    <div class="reveal"><p>Чтобы забронировать место, нужен аккаунт.</p><p><a class="btn btn-primary" href="{% url 'account:login' %}?next=/%23booking">Войти</a> <a class="btn btn-ghost" href="{% url 'account:register' %}">Регистрация</a></p></div>
+    {% endif %}
+  </section>
+
+  <section id="contacts" class="section">
+    <h2 class="reveal">Контакты</h2>
+    <p class="reveal">Адрес, телефон и часы работы: <em>добавьте свои данные</em>.</p>
+  </section>
+
+  <footer>
+    <p>TWILIGHT © 2026 <span class="star-mini" title="Twilight Sparkle">✦</span></p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  {{ tariffs_json|json_script:"tariffsData" }}
+  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/features.js' %}"></script>
+  <script src="{% static 'js/club.js' %}"></script>
+  <script src="{% static 'js/cursor-star.js' %}" defer></script>
+</body>
+</html>

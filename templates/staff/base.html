@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block bodyclass %}app staff{% endblock %}
+{% block body %}
+<div class="shell">
+  <aside class="sidebar">
+    <a href="/" class="logo">TWILIGHT</a>
+    <p class="who">Администратор<br><span class="mono">{{ request.user.full_name }}</span></p>
+    <nav>
+      <a href="{% url 'staff:dashboard' %}">Обзор</a>
+      <a href="{% url 'staff:bookings' %}">Бронирования</a>
+      <a href="{% url 'staff:sessions' %}">Сессии</a>
+      <a href="{% url 'staff:payments' %}">Платежи</a>
+      <a href="{% url 'staff:computers' %}">Компьютеры</a>
+      <a href="{% url 'staff:tariffs' %}">Тарифы</a>
+      <a href="{% url 'staff:stats' %}">Статистика</a>
+    </nav>
+    <form method="post" action="{% url 'account:logout' %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Выйти</button></form>
+  </aside>
+  <main class="content">
+    {% include "_messages.html" %}
+    <h1>{% block h1 %}{% endblock %}</h1>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

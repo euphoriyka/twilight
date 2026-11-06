@@ -1,0 +1,11 @@
+<form method="get" class="inline-form">
+  <div class="chips">
+    <a class="chip {% if preset == 'today' %}active{% endif %}" href="?period=today">Сегодня</a>
+    <a class="chip {% if preset == 'week' %}active{% endif %}" href="?period=week">7 дней</a>
+    <a class="chip {% if preset == 'month' %}active{% endif %}" href="?period=month">30 дней</a>
+  </div>
+  <input type="hidden" name="period" value="custom">
+  <div class="field"><label>С</label><input type="date" name="date_from" value="{{ stats.date_from|date:'Y-m-d' }}"></div>
+  <div class="field"><label>По</label><input type="date" name="date_to" value="{{ stats.date_to|date:'Y-m-d' }}"></div>
+  <button class="btn btn-ghost" type="submit">Применить</button>
+</form>

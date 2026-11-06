@@ -1,0 +1,10 @@
+{% extends "account/base.html" %}{% load club_extras %}
+{% block title %}Платежи · TWILIGHT{% endblock %}
+{% block h1 %}Платежи{% endblock %}
+{% block content %}
+{% if page %}<div class="table-wrap"><table>
+<tr><th>Сессия</th><th>Сумма</th><th>Способ</th><th>Статус</th><th>Оплачено</th><th>Транзакция</th></tr>
+{% for p in page %}<tr><td>№{{ p.session.pk }} · место {{ p.session.computer.computer_number }}</td><td>{{ p.amount|money }}</td><td>{{ p.get_payment_method_display }}</td>
+<td><span class="badge {{ p.status|badge }}">{{ p.get_status_display }}</span></td><td>{{ p.paid_at|date:"d.m.Y H:i"|default:"—" }}</td><td class="mono">{{ p.transaction_number|default:"—" }}</td></tr>{% endfor %}
+</table></div>{% include "_pagination.html" %}{% else %}<p class="empty">Платежей пока нет.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "staff/base.html" %}{% load club_extras %}
+{% block title %}Тарифы · TWILIGHT{% endblock %}
+{% block h1 %}Тарифы{% endblock %}
+{% block content %}
+<p><a class="btn btn-primary" href="{% url 'staff:tariff_new' %}">Добавить тариф</a></p>
+<div class="table-wrap"><table>
+<tr><th>Название</th><th>Категория</th><th>Тип</th><th>Цена/час</th><th>Статус</th><th></th></tr>
+{% for t in items %}<tr><td>{{ t.tariff_name }}</td><td>{{ t.get_category_display }}</td><td>{{ t.get_kind_display }}</td><td>{{ t.price_per_hour|money }}</td>
+<td><span class="badge {% if t.is_active %}ok{% else %}muted{% endif %}">{% if t.is_active %}Доступен{% else %}Отключён{% endif %}</span></td>
+<td class="row-actions"><a class="btn btn-ghost" href="{% url 'staff:tariff_edit' t.pk %}">Изменить</a>
+<form method="post" action="{% url 'staff:tariff_toggle' t.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">{% if t.is_active %}Отключить{% else %}Включить{% endif %}</button></form></td></tr>{% endfor %}
+</table></div>
+<p class="small">Тарифы не удаляются, чтобы сохранилась история сессий; ненужный тариф отключается.</p>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block bodyclass %}app cabinet{% endblock %}
+{% block body %}
+<div class="shell">
+  <aside class="sidebar">
+    <a href="/" class="logo">TWILIGHT</a>
+    <p class="who">{{ request.user.full_name }}<br><span class="mono">{{ request.user.member_number }}</span></p>
+    <nav>
+      <a href="{% url 'account:home' %}">Обзор</a>
+      <a href="{% url 'account:computers' %}">Забронировать</a>
+      <a href="{% url 'account:bookings' %}">Мои брони</a>
+      <a href="{% url 'account:sessions' %}">Сессии</a>
+      <a href="{% url 'account:payments' %}">Платежи</a>
+      <a href="{% url 'account:tariffs' %}">Тарифы</a>
+    </nav>
+    <form method="post" action="{% url 'account:logout' %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Выйти</button></form>
+  </aside>
+  <main class="content">
+    {% include "_messages.html" %}
+    <h1>{% block h1 %}{% endblock %}</h1>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}
