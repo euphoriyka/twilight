@@ -67,7 +67,7 @@ class Tariff(models.Model):
         verbose_name = "Тариф"
         verbose_name_plural = "Тарифы"
         constraints = [
-            models.CheckConstraint(condition=Q(price_per_hour__gte=0), name="tariff_price_gte_0"),
+            models.CheckConstraint(check=Q(price_per_hour__gte=0), name="tariff_price_gte_0"),
         ]
 
     def __str__(self):
@@ -99,7 +99,7 @@ class Booking(models.Model):
         verbose_name = "Бронирование"
         verbose_name_plural = "Бронирования"
         constraints = [
-            models.CheckConstraint(condition=Q(end_time__gt=F("start_time")), name="booking_end_after_start"),
+            models.CheckConstraint(check=Q(end_time__gt=F("start_time")), name="booking_end_after_start"),
             # PostgreSQL сам не даст создать два активных бронирования
             # одного компьютера с пересекающимся временем (нужен btree_gist).
             ExclusionConstraint(
@@ -108,7 +108,7 @@ class Booking(models.Model):
                     (TsTzRange("start_time", "end_time", RangeBoundary()), RangeOperators.OVERLAPS),
                     ("computer", RangeOperators.EQUAL),
                 ],
-                condition=Q(status__in=["pending", "confirmed"]),
+                check=Q(status__in=["pending", "confirmed"]),
             ),
         ]
 
@@ -135,12 +135,12 @@ class GameSession(models.Model):
         verbose_name = "Игровая сессия"
         verbose_name_plural = "Игровые сессии"
         constraints = [
-            models.CheckConstraint(condition=Q(total_amount__gte=0), name="session_total_gte_0"),
+            models.CheckConstraint(check=Q(total_amount__gte=0), name="session_total_gte_0"),
             models.CheckConstraint(
-                condition=Q(end_time__isnull=True) | Q(end_time__gte=F("start_time")),
+                check=Q(end_time__isnull=True) | Q(end_time__gte=F("start_time")),
                 name="session_end_after_start"),
             # на одном компьютере не больше одной активной сессии
-            models.UniqueConstraint(fields=["computer"], condition=Q(end_time__isnull=True),
+            models.UniqueConstraint(fields=["computer"], check=Q(end_time__isnull=True),
                                     name="one_active_session_per_computer"),
         ]
 
@@ -178,9 +178,9 @@ class Payment(models.Model):
         verbose_name = "Платёж"
         verbose_name_plural = "Платежи"
         constraints = [
-            models.CheckConstraint(condition=Q(amount__gt=0), name="payment_amount_gt_0"),
+            models.CheckConstraint(check=Q(amount__gt=0), name="payment_amount_gt_0"),
             # защита от двойного нажатия: у сессии один «живой» платёж (ожидает/оплачен)
-            models.UniqueConstraint(fields=["session"], condition=Q(status__in=["pending", "paid"]),
+            models.UniqueConstraint(fields=["session"], check=Q(status__in=["pending", "paid"]),
                                     name="one_live_payment_per_session"),
         ]
 
