@@ -140,7 +140,7 @@ class GameSession(models.Model):
                 check=Q(end_time__isnull=True) | Q(end_time__gte=F("start_time")),
                 name="session_end_after_start"),
             # на одном компьютере не больше одной активной сессии
-            models.UniqueConstraint(fields=["computer"], check=Q(end_time__isnull=True),
+            models.UniqueConstraint(fields=["computer"], condition=Q(end_time__isnull=True),
                                     name="one_active_session_per_computer"),
         ]
 
@@ -180,7 +180,7 @@ class Payment(models.Model):
         constraints = [
             models.CheckConstraint(check=Q(amount__gt=0), name="payment_amount_gt_0"),
             # защита от двойного нажатия: у сессии один «живой» платёж (ожидает/оплачен)
-            models.UniqueConstraint(fields=["session"], check=Q(status__in=["pending", "paid"]),
+            models.UniqueConstraint(fields=["session"], condition=Q(status__in=["pending", "paid"]),
                                     name="one_live_payment_per_session"),
         ]
 
