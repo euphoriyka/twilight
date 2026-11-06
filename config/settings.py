@@ -26,7 +26,7 @@ if not SECRET_KEY:
         SECRET_KEY = "dev-only-insecure-key"  # только для локальной разработки
     else:
         raise RuntimeError("Задайте DJANGO_SECRET_KEY в .env или переменных окружения.")
-ALLOWED_HOSTS = [h for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h]
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
